@@ -4,7 +4,7 @@
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Stars](https://img.shields.io/github/stars/your-username/whatsapp-webhook-api?style=social)
 
-**WhatsApp Webhook API** adalah platform canggih untuk mengelola integrasi WhatsApp secara efisien. Proyek ini bertujuan melakukan peningkatan menyeluruh pada desain dan fungsionalitas situs web WhatsApp Webhook API, menjadikannya lebih modern, profesional, dan responsif terhadap kebutuhan pengguna.
+**WhatsApp Webhook API** adalah platform canggih untuk mengelola integrasi WhatsApp secara efisien. Proyek ini dibangun berdasarkan source code utama milik **Bang Roynaldi**, dengan kontribusi tambahan dari Wahyu Sudrajad berupa peningkatan tampilan antarmuka (UI), implementasi mode tema, dan penambahan beberapa halaman fungsional tambahan.
 
 ---
 
@@ -179,6 +179,8 @@ npm start
 
 ## 🤝 Kontribusi
 
+Proyek ini berasal dari **Bang Roynaldi**, dan dikembangkan lebih lanjut oleh Wahyu Sudrajad untuk menyempurnakan tampilan antarmuka serta menambah fungsionalitas.
+
 Pull request sangat disambut. Untuk perubahan besar, buka *issue* terlebih dahulu untuk diskusi.
 
 ✅ Pastikan pengujian diperbarui sesuai perubahan.
@@ -196,7 +198,7 @@ Proyek ini menggunakan lisensi [MIT License](LICENSE).
 
 ---
 
-Dikembangkan oleh [Wahyu Sudrajad](https://github.com/wahyusudrajad)
+Diupdate oleh [Wahyu Sudrajad](https://github.com/wahyusudrajad)
 ⭐ Beri bintang jika proyek ini membantu kamu!
 
 ```
