@@ -1,0 +1,27 @@
+# Jalankan proyek Node.js saat ada rilis baru
+# Disesuaikan untuk proyek yang menggunakan npm install & npm start (tanpa npm test)
+
+name: Node.js App Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  start-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout Kode
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📥 Install Dependensi
+        run: npm install
+
+      - name: 🚀 Jalankan Aplikasi
+        run: npm start
