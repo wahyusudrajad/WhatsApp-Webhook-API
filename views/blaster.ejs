@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <%- include('partials/head', { title: 'WhatsApp Blaster' }) %>
+    <style>
+        .log-box {
+            background-color: var(--muted);
+            color: var(--foreground);
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: var(--radius);
+            height: 300px;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        [data-theme="dark"] .log-box {
+            background-color: #1a1a1a;
+            color: #f1f1f1;
+        }
+        
+        .log-item {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .blaster-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .blaster-content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="blaster-page">
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-layout blaster-content">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'Message Blaster' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="ri-rocket-2-line card-icon"></i>
+                                Message Blaster
+                            </h2>
+                        </div>
+                        
+                        <form id="blasterForm">
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="4" class="form-control" 
+                                    placeholder="Enter your message here..." required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contacts">Recipients</label>
+                                <textarea id="contacts" name="contacts" rows="6" class="form-control" 
+                                    placeholder="Enter phone numbers (one per line)&#10;Example:&#10;+6281234567890&#10;+6281234567891" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="delay">Delay between messages (seconds)</label>
+                                <input type="number" id="delay" name="delay" class="form-control" 
+                                    value="2" min="1" max="60" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ri-send-plane-line"></i>
+                                Start Blasting
+                            </button>
+                        </form>
+                        
+                        <div class="log-box" id="logBox">
+                            <div class="log-item">Ready to send messages...</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+    
+    <script>
+        document.getElementById('blasterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const message = document.getElementById('message').value;
+            const contacts = document.getElementById('contacts').value.split('\n').filter(c => c.trim());
+            const delay = parseInt(document.getElementById('delay').value);
+            
+            if (!message || contacts.length === 0) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            startBlasting(message, contacts, delay);
+        });
+        
+        function startBlasting(message, contacts, delay) {
+            const logBox = document.getElementById('logBox');
+            logBox.innerHTML = '<div class="log-item">Starting message blast...</div>';
+            
+            let index = 0;
+            
+            function sendNext() {
+                if (index >= contacts.length) {
+                    addLog('✅ All messages sent successfully!');
+                    return;
+                }
+                
+                const contact = contacts[index].trim();
+                addLog(`📤 Sending to ${contact}...`);
+                
+                fetch('/api/whatsapp/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        to: contact,
+                        message: message
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addLog(`✅ Sent to ${contact}`);
+                    } else {
+                        addLog(`❌ Failed to send to ${contact}: ${data.error}`);
+                    }
+                    
+                    index++;
+                    setTimeout(sendNext, delay * 1000);
+                })
+                .catch(error => {
+                    addLog(`❌ Error sending to ${contact}: ${error.message}`);
+                    index++;
+                    setTimeout(sendNext, delay * 1000);
+                });
+            }
+            
+            sendNext();
+        }
+        
+        function addLog(message) {
+            const logBox = document.getElementById('logBox');
+            const timestamp = new Date().toLocaleTimeString();
+            logBox.innerHTML += `<div class="log-item">[${timestamp}] ${message}</div>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include('partials/head', { title: 'Support' }) %>
+    <style>
+        .support-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .support-content {
+            flex: 1;
+        }
+        
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .support-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .support-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .support-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .support-card h3 {
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+        
+        .support-card p {
+            color: var(--muted-foreground);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .support-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .support-btn:hover {
+            background: #128C7E;
+            transform: translateY(-1px);
+        }
+        
+        .contact-form {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card);
+            color: var(--foreground);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-operational {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+        
+        .status-maintenance {
+            background: rgba(251, 191, 36, 0.1);
+            color: #d97706;
+        }
+        
+        .status-incident {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+        
+        .knowledge-base {
+            background: var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .knowledge-base h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .kb-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .kb-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--card);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--foreground);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+        
+        .kb-link:hover {
+            background: var(--accent);
+            transform: translateX(4px);
+        }
+        
+        .kb-link i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .response-time {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .response-time h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .response-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .response-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--accent);
+            border-radius: 8px;
+        }
+        
+        .response-item .time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .response-item .label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="support-page">
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-layout support-content">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'Support' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-customer-service-2-line card-icon"></i>
+                                    Support Center
+                                </h1>
+                                <p>Get help with WhatsApp Webhook API</p>
+                                
+                                <div style="margin-top: 1rem;">
+                                    <span class="status-indicator status-operational">
+                                        <i class="ri-checkbox-circle-line"></i>
+                                        All Systems Operational
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="knowledge-base">
+                                <h3><i class="ri-book-open-line"></i> Knowledge Base</h3>
+                                <p>Find answers to common questions and learn how to use our API effectively.</p>
+                                
+                                <div class="kb-links">
+                                    <a href="/documentation" class="kb-link">
+                                        <i class="ri-file-text-line"></i>
+                                        <div>
+                                            <div style="font-weight: 600;">Documentation</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">Complete API guide</div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="/api-reference" class="kb-link">
+                                        <i class="ri-code-s-slash-line"></i>
+                                        <div>
+                                            <div style="font-weight: 600;">API Reference</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">Detailed endpoint docs</div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="/faq" class="kb-link">
+                                        <i class="ri-question-answer-line"></i>
+                                        <div>
+                                            <div style="font-weight: 600;">FAQ</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">Frequently asked questions</div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="/report-issues" class="kb-link">
+                                        <i class="ri-bug-line"></i>
+                                        <div>
+                                            <div style="font-weight: 600;">Report Issues</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">Bug reports & feedback</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="support-grid">
+                                <div class="support-card">
+                                    <div class="support-icon">
+                                        <i class="ri-mail-line"></i>
+                                    </div>
+                                    <h3>Email Support</h3>
+                                    <p>Get detailed help from our support team. We typically respond within 24 hours.</p>
+                                    <a href="mailto:support@wahyuofficial.my.id" class="support-btn">Send Email</a>
+                                </div>
+                                
+                                <div class="support-card">
+                                    <div class="support-icon">
+                                        <i class="ri-chat-3-line"></i>
+                                    </div>
+                                    <h3>Live Chat</h3>
+                                    <p>Chat with our support team in real-time. Available during business hours.</p>
+                                    <button class="support-btn" onclick="openLiveChat()">Start Chat</button>
+                                </div>
+                                
+                                <div class="support-card">
+                                    <div class="support-icon">
+                                        <i class="ri-discord-line"></i>
+                                    </div>
+                                    <h3>Community Discord</h3>
+                                    <p>Join our Discord community to get help from other developers and our team.</p>
+                                    <a href="#" class="support-btn">Join Discord</a>
+                                </div>
+                                
+                                <div class="support-card">
+                                    <div class="support-icon">
+                                        <i class="ri-phone-line"></i>
+                                    </div>
+                                    <h3>Phone Support</h3>
+                                    <p>For urgent issues, call our support hotline. Available 24/7 for premium users.</p>
+                                    <a href="tel:+6281234567890" class="support-btn">Call Now</a>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-form">
+                                <h3><i class="ri-message-3-line"></i> Contact Support</h3>
+                                <p style="margin-bottom: 2rem; color: var(--muted-foreground);">
+                                    Can't find what you're looking for? Send us a message and we'll get back to you.
+                                </p>
+                                
+                                <form id="supportForm">
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="text" id="name" name="name" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" name="email" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="category">Issue Category</label>
+                                        <select id="category" name="category" required>
+                                            <option value="">Select a category</option>
+                                            <option value="api">API Issues</option>
+                                            <option value="billing">Billing & Account</option>
+                                            <option value="technical">Technical Support</option>
+                                            <option value="feature">Feature Request</option>
+                                            <option value="bug">Bug Report</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="priority">Priority Level</label>
+                                        <select id="priority" name="priority" required>
+                                            <option value="">Select priority</option>
+                                            <option value="low">Low - General question</option>
+                                            <option value="medium">Medium - Non-urgent issue</option>
+                                            <option value="high">High - Service impacted</option>
+                                            <option value="urgent">Urgent - Service down</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="subject">Subject</label>
+                                        <input type="text" id="subject" name="subject" placeholder="Brief description of your issue" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="message">Message</label>
+                                        <textarea id="message" name="message" placeholder="Please provide detailed information about your issue, including any error messages and steps to reproduce." required></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="support-btn" style="width: 100%; padding: 1rem;">
+                                        <i class="ri-send-plane-line"></i>
+                                        Send Support Request
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="response-time">
+                                <h4><i class="ri-time-line"></i> Expected Response Times</h4>
+                                <div class="response-grid">
+                                    <div class="response-item">
+                                        <div class="time">< 1 hour</div>
+                                        <div class="label">Urgent Issues</div>
+                                    </div>
+                                    <div class="response-item">
+                                        <div class="time">< 4 hours</div>
+                                        <div class="label">High Priority</div>
+                                    </div>
+                                    <div class="response-item">
+                                        <div class="time">< 24 hours</div>
+                                        <div class="label">Medium Priority</div>
+                                    </div>
+                                    <div class="response-item">
+                                        <div class="time">< 48 hours</div>
+                                        <div class="label">Low Priority</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+    
+    <script>
+        function openLiveChat() {
+            // Implement live chat functionality
+            alert('Live chat feature will be available soon!');
+        }
+        
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="ri-loader-4-line"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                alert('Support request submitted successfully! We\'ll get back to you soon.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+

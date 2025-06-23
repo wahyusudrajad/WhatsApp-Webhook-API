@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include('partials/head', { title: 'Report Issues' }) %>
+    <style>
+        .report-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .report-content {
+            flex: 1;
+        }
+        
+        .issue-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .issue-type {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .issue-type:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .issue-type.selected {
+            border-color: var(--primary);
+            background: rgba(37, 211, 102, 0.05);
+        }
+        
+        .issue-type-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .issue-type h3 {
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+        
+        .issue-type p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .report-form {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            display: none;
+        }
+        
+        .report-form.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card);
+            color: var(--foreground);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .severity-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        
+        .severity-option {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .severity-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .severity-option.selected {
+            border-color: var(--primary);
+            background: rgba(37, 211, 102, 0.05);
+        }
+        
+        .severity-low { border-color: #10b981; }
+        .severity-medium { border-color: #f59e0b; }
+        .severity-high { border-color: #ef4444; }
+        .severity-critical { border-color: #dc2626; }
+        
+        .severity-low.selected { background: rgba(16, 185, 129, 0.1); border-color: #10b981; }
+        .severity-medium.selected { background: rgba(245, 158, 11, 0.1); border-color: #f59e0b; }
+        .severity-high.selected { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+        .severity-critical.selected { background: rgba(220, 38, 38, 0.1); border-color: #dc2626; }
+        
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(37, 211, 102, 0.05);
+        }
+        
+        .file-upload.dragover {
+            border-color: var(--primary);
+            background: rgba(37, 211, 102, 0.1);
+        }
+        
+        .file-list {
+            margin-top: 1rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--accent);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .remove-file {
+            background: var(--destructive);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background: #128C7E;
+            transform: translateY(-1px);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .guidelines {
+            background: var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .guidelines h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .guidelines ul {
+            margin-left: 1.5rem;
+        }
+        
+        .guidelines li {
+            margin-bottom: 0.5rem;
+            color: var(--muted-foreground);
+        }
+    </style>
+</head>
+<body class="report-page">
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-layout report-content">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'Report Issues' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-bug-line card-icon"></i>
+                                    Report Issues
+                                </h1>
+                                <p>Help us improve by reporting bugs, issues, or suggesting new features</p>
+                            </div>
+                            
+                            <div class="guidelines">
+                                <h4><i class="ri-information-line"></i> Reporting Guidelines</h4>
+                                <ul>
+                                    <li>Provide clear and detailed descriptions of the issue</li>
+                                    <li>Include steps to reproduce the problem</li>
+                                    <li>Attach screenshots or logs when possible</li>
+                                    <li>Check our FAQ first to see if the issue is already addressed</li>
+                                    <li>Use appropriate severity levels to help us prioritize</li>
+                                </ul>
+                            </div>
+                            
+                            <h3 style="margin-bottom: 1rem;">What type of issue are you reporting?</h3>
+                            
+                            <div class="issue-types">
+                                <div class="issue-type" data-type="bug">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-bug-line"></i>
+                                    </div>
+                                    <h3>Bug Report</h3>
+                                    <p>Something isn't working as expected. Report crashes, errors, or unexpected behavior.</p>
+                                </div>
+                                
+                                <div class="issue-type" data-type="feature">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-lightbulb-line"></i>
+                                    </div>
+                                    <h3>Feature Request</h3>
+                                    <p>Suggest new features or improvements to existing functionality.</p>
+                                </div>
+                                
+                                <div class="issue-type" data-type="performance">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-speed-line"></i>
+                                    </div>
+                                    <h3>Performance Issue</h3>
+                                    <p>Report slow response times, timeouts, or other performance problems.</p>
+                                </div>
+                                
+                                <div class="issue-type" data-type="security">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-shield-line"></i>
+                                    </div>
+                                    <h3>Security Concern</h3>
+                                    <p>Report potential security vulnerabilities or privacy concerns.</p>
+                                </div>
+                                
+                                <div class="issue-type" data-type="documentation">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-file-text-line"></i>
+                                    </div>
+                                    <h3>Documentation</h3>
+                                    <p>Report errors, missing information, or suggest improvements to documentation.</p>
+                                </div>
+                                
+                                <div class="issue-type" data-type="other">
+                                    <div class="issue-type-icon">
+                                        <i class="ri-question-line"></i>
+                                    </div>
+                                    <h3>Other</h3>
+                                    <p>Report issues that don't fit into the above categories.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="report-form" id="reportForm">
+                                <form id="issueForm">
+                                    <input type="hidden" id="issueType" name="issueType">
+                                    
+                                    <div class="form-section">
+                                        <h4><i class="ri-information-line"></i> Basic Information</h4>
+                                        
+                                        <div class="form-group">
+                                            <label for="title">Issue Title</label>
+                                            <input type="text" id="title" name="title" placeholder="Brief description of the issue" required>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="description">Detailed Description</label>
+                                            <textarea id="description" name="description" placeholder="Provide a detailed description of the issue, including what you expected to happen and what actually happened." required></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-section">
+                                        <h4><i class="ri-settings-line"></i> Technical Details</h4>
+                                        
+                                        <div class="form-group">
+                                            <label for="environment">Environment</label>
+                                            <select id="environment" name="environment" required>
+                                                <option value="">Select environment</option>
+                                                <option value="production">Production</option>
+                                                <option value="staging">Staging</option>
+                                                <option value="development">Development</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="browser">Browser/Platform</label>
+                                            <input type="text" id="browser" name="browser" placeholder="e.g., Chrome 120, Firefox 119, Node.js 18.x">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="steps">Steps to Reproduce</label>
+                                            <textarea id="steps" name="steps" placeholder="1. Go to...&#10;2. Click on...&#10;3. See error..."></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-section">
+                                        <h4><i class="ri-alarm-warning-line"></i> Severity Level</h4>
+                                        <div class="severity-options">
+                                            <div class="severity-option severity-low" data-severity="low">
+                                                <div style="font-weight: 600; color: #10b981;">Low</div>
+                                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">Minor issue</div>
+                                            </div>
+                                            <div class="severity-option severity-medium" data-severity="medium">
+                                                <div style="font-weight: 600; color: #f59e0b;">Medium</div>
+                                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">Affects functionality</div>
+                                            </div>
+                                            <div class="severity-option severity-high" data-severity="high">
+                                                <div style="font-weight: 600; color: #ef4444;">High</div>
+                                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">Major impact</div>
+                                            </div>
+                                            <div class="severity-option severity-critical" data-severity="critical">
+                                                <div style="font-weight: 600; color: #dc2626;">Critical</div>
+                                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">Service down</div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="severity" name="severity" required>
+                                    </div>
+                                    
+                                    <div class="form-section">
+                                        <h4><i class="ri-attachment-line"></i> Attachments</h4>
+                                        <div class="file-upload" id="fileUpload">
+                                            <i class="ri-upload-cloud-line" style="font-size: 2rem; color: var(--muted-foreground); margin-bottom: 0.5rem;"></i>
+                                            <p>Drag and drop files here or click to browse</p>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.5rem;">
+                                                Supported: Images, logs, screenshots (max 10MB each)
+                                            </p>
+                                            <input type="file" id="fileInput" multiple accept="image/*,.txt,.log,.json" style="display: none;">
+                                        </div>
+                                        <div class="file-list" id="fileList"></div>
+                                    </div>
+                                    
+                                    <div class="form-section">
+                                        <h4><i class="ri-user-line"></i> Contact Information</h4>
+                                        
+                                        <div class="form-group">
+                                            <label for="email">Email Address</label>
+                                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="name">Name (Optional)</label>
+                                            <input type="text" id="name" name="name" placeholder="Your name">
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="submit-btn">
+                                        <i class="ri-send-plane-line"></i>
+                                        Submit Issue Report
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+    
+    <script>
+        let selectedFiles = [];
+        
+        // Issue type selection
+        document.querySelectorAll('.issue-type').forEach(type => {
+            type.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.issue-type').forEach(t => t.classList.remove('selected'));
+                
+                // Select current type
+                type.classList.add('selected');
+                
+                // Set hidden input value
+                document.getElementById('issueType').value = type.dataset.type;
+                
+                // Show form
+                document.getElementById('reportForm').classList.add('active');
+                
+                // Scroll to form
+                document.getElementById('reportForm').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Severity selection
+        document.querySelectorAll('.severity-option').forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.severity-option').forEach(o => o.classList.remove('selected'));
+                
+                // Select current option
+                option.classList.add('selected');
+                
+                // Set hidden input value
+                document.getElementById('severity').value = option.dataset.severity;
+            });
+        });
+        
+        // File upload handling
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        fileUpload.addEventListener('click', () => fileInput.click());
+        
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+                    return;
+                }
+                
+                selectedFiles.push(file);
+                addFileToList(file);
+            });
+        }
+        
+        function addFileToList(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <i class="ri-file-line"></i>
+                    <span>${file.name}</span>
+                    <span style="color: var(--muted-foreground); font-size: 0.875rem;">(${formatFileSize(file.size)})</span>
+                </div>
+                <button type="button" class="remove-file" onclick="removeFile('${file.name}')">
+                    <i class="ri-close-line"></i>
+                </button>
+            `;
+            fileList.appendChild(fileItem);
+        }
+        
+        function removeFile(fileName) {
+            selectedFiles = selectedFiles.filter(file => file.name !== fileName);
+            
+            // Remove from UI
+            const fileItems = fileList.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.textContent.includes(fileName)) {
+                    item.remove();
+                }
+            });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Form submission
+        document.getElementById('issueForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate required fields
+            if (!document.getElementById('issueType').value) {
+                alert('Please select an issue type first.');
+                return;
+            }
+            
+            if (!document.getElementById('severity').value) {
+                alert('Please select a severity level.');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="ri-loader-4-line"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                alert('Issue report submitted successfully! We\'ll review it and get back to you soon.');
+                
+                // Reset form
+                this.reset();
+                selectedFiles = [];
+                fileList.innerHTML = '';
+                document.querySelectorAll('.issue-type').forEach(t => t.classList.remove('selected'));
+                document.querySelectorAll('.severity-option').forEach(o => o.classList.remove('selected'));
+                document.getElementById('reportForm').classList.remove('active');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+

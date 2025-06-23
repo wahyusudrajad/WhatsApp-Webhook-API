@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <%- include('partials/head', { title: 'Contact Management' }) %>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'Contact Management' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <!-- Add Contact Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Add New Contact</h3>
+                                <p class="card-description">Save a new contact to your list.</p>
+                            </div>
+                            <i class="ri-user-add-line card-icon"></i>
+                        </div>
+                        <div class="card-content">
+                            <form action="/contacts/add" method="POST">
+                                <div class="grid-2-cols">
+                                    <div class="form-group">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" id="name" name="name" required placeholder="Enter name" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="text" id="phone" name="phone" required placeholder="e.g., 6281234567890" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ri-save-line"></i>
+                                        <span>Save Contact</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Import Contacts Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Import Contacts from VCF</h3>
+                                <p class="card-description">Upload a .vcf file to add multiple contacts at once.</p>
+                            </div>
+                            <i class="ri-upload-2-line card-icon"></i>
+                        </div>
+                        <div class="card-content">
+                            <form action="/contacts/import" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="vcfFile" class="form-label">VCF File</label>
+                                    <input type="file" id="vcfFile" name="vcfFile" accept=".vcf, .vcf/*" required class="form-control">
+                                </div>
+                                <div class="actions">
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="ri-upload-2-line"></i>
+                                        <span>Import Contacts</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Import CSV Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Import Contacts from CSV</h3>
+                                <p class="card-description">Upload a .csv file. Columns: <strong>Name, Phone</strong></p>
+                            </div>
+                            <i class="ri-file-excel-2-line card-icon"></i>
+                        </div>
+                        <div class="card-content">
+                            <form action="/contacts/import/csv" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="csvFile" class="form-label">CSV File</label>
+                                    <input type="file" id="csvFile" name="csvFile" accept=".csv" required class="form-control">
+                                </div>
+                                <div class="actions">
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="ri-upload-2-line"></i>
+                                        <span>Import from CSV</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Contact List -->
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Contact List</h3>
+                                <p class="card-description">All your saved contacts.</p>
+                            </div>
+                            <i class="ri-contacts-book-2-line card-icon"></i>
+                        </div>
+                        <div class="card-content">
+                            <% if (locals.error) { %>
+                                <div class="alert alert-danger"><%= error %></div>
+                            <% } %>
+                            <% if (locals.success) { %>
+                                <div class="alert alert-success"><%= success %></div>
+                            <% } %>
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Phone Number</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (contacts.length > 0) { %>
+                                            <% contacts.forEach(contact => { %>
+                                                <tr>
+                                                    <td><%= contact.name %></td>
+                                                    <td><%= contact.phone %></td>
+                                                    <td>
+                                                        <form action="/contacts/delete/<%= contact.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this contact?');" style="display: inline;">
+                                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                                <i class="ri-delete-bin-line"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="3" class="text-center text-muted">No contacts found.</td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <% if (totalPages > 1) { %>
+                                <div class="pagination">
+                                    <% if (currentPage > 1) { %>
+                                        <a href="/contacts?page=<%= currentPage - 1 %>" class="btn btn-secondary">&laquo; Prev</a>
+                                    <% } %>
+
+                                    <%
+                                        const pageWindow = 1;
+                                        const allPages = [];
+
+                                        allPages.push(1);
+                                        for (let i = Math.max(2, currentPage - pageWindow); i <= Math.min(totalPages - 1, currentPage + pageWindow); i++) {
+                                            allPages.push(i);
+                                        }
+                                        if (totalPages > 1) {
+                                            allPages.push(totalPages);
+                                        }
+
+                                        const uniquePages = [...new Set(allPages)];
+                                        let lastPage = 0;
+                                    %>
+
+                                    <% uniquePages.forEach(p => { %>
+                                        <% if (lastPage > 0 && p - lastPage > 1) { %>
+                                            <span class="pagination-ellipsis">&hellip;</span>
+                                        <% } %>
+
+                                        <% if (p === currentPage) { %>
+                                            <span class="btn btn-primary"><%= p %></span>
+                                        <% } else { %>
+                                            <a href="/contacts?page=<%= p %>" class="btn btn-secondary"><%= p %></a>
+                                        <% } %>
+                                        <% lastPage = p; %>
+                                    <% }); %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <a href="/contacts?page=<%= currentPage + 1 %>" class="btn btn-secondary">Next &raquo;</a>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html> 

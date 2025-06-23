@@ -1,0 +1,595 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="ri-whatsapp-fill"></i>
+            </div>
+            <div class="brand-content">
+                <h1 class="sidebar-title">WA Webhook</h1>
+                <p class="sidebar-subtitle">API Management</p>
+            </div>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="ri-menu-fold-line"></i>
+        </button>
+    </div>
+    
+    <nav class="sidebar-navigation">
+        <div class="nav-section">
+            <span class="nav-section-title">
+                <i class="ri-apps-line"></i>
+                Main
+            </span>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/dashboard" class="<%= (typeof page !== 'undefined' && page === 'dashboard') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-dashboard-3-fill"></i>
+                        </div>
+                        <span class="nav-text">Dashboard</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/blaster" class="<%= (typeof page !== 'undefined' && page === 'blaster') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-rocket-2-fill"></i>
+                        </div>
+                        <span class="nav-text">Message Blaster</span>
+                        <div class="nav-badge">Pro</div>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/contacts" class="<%= (typeof page !== 'undefined' && page === 'contacts') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-contacts-book-2-fill"></i>
+                        </div>
+                        <span class="nav-text">Contacts</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-section-title">
+                <i class="ri-settings-3-line"></i>
+                Automation
+            </span>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/auto-reply" class="<%= (typeof page !== 'undefined' && page === 'auto-reply') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-reply-all-fill"></i>
+                        </div>
+                        <span class="nav-text">Auto Reply</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/webhooks" class="<%= (typeof page !== 'undefined' && page === 'webhooks') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-webhook-line"></i>
+                        </div>
+                        <span class="nav-text">Webhooks</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-section-title">
+                <i class="ri-tools-line"></i>
+                Developer
+            </span>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/api-keys" class="<%= (typeof page !== 'undefined' && page === 'api-keys') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-key-2-fill"></i>
+                        </div>
+                        <span class="nav-text">API Keys</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/documentation" class="<%= (typeof page !== 'undefined' && page === 'documentation') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-book-open-fill"></i>
+                        </div>
+                        <span class="nav-text">Documentation</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/logs" class="<%= (typeof page !== 'undefined' && page === 'logs') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-file-list-3-fill"></i>
+                        </div>
+                        <span class="nav-text">Activity Logs</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-section-title">
+                <i class="ri-file-text-line"></i>
+                Resources
+            </span>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/api-reference" class="<%= (typeof page !== 'undefined' && page === 'api-reference') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-code-s-slash-line"></i>
+                        </div>
+                        <span class="nav-text">API Reference</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/faq" class="<%= (typeof page !== 'undefined' && page === 'faq') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-question-answer-line"></i>
+                        </div>
+                        <span class="nav-text">FAQ</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/support" class="<%= (typeof page !== 'undefined' && page === 'support') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-lifebuoy-line"></i>
+                        </div>
+                        <span class="nav-text">Support</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/report-issues" class="<%= (typeof page !== 'undefined' && page === 'report-issues') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-bug-line"></i>
+                        </div>
+                        <span class="nav-text">Report Issues</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">
+                <i class="ri-bank-line"></i>
+                Legal
+            </span>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/privacy-policy" class="<%= (typeof page !== 'undefined' && page === 'privacy-policy') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-lock-line"></i>
+                        </div>
+                        <span class="nav-text">Privacy Policy</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/terms-of-service" class="<%= (typeof page !== 'undefined' && page === 'terms-of-service') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-file-text-line"></i>
+                        </div>
+                        <span class="nav-text">Terms of Service</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cookie-policy" class="<%= (typeof page !== 'undefined' && page === 'cookie-policy') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-cookie-line"></i>
+                        </div>
+                        <span class="nav-text">Cookie Policy</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/license" class="<%= (typeof page !== 'undefined' && page === 'license') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-article-line"></i>
+                        </div>
+                        <span class="nav-text">License</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/contact-us" class="<%= (typeof page !== 'undefined' && page === 'contact-us') ? 'active' : '' %>">
+                        <div class="nav-icon">
+                            <i class="ri-mail-line"></i>
+                        </div>
+                        <span class="nav-text">Contact Us</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <div class="connection-status">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span class="status-text">Connected</span>
+            </div>
+            <div class="status-details">
+                <span class="status-info">WhatsApp Active</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-actions">
+            <button class="action-btn" onclick="refreshConnection()" title="Refresh Connection">
+                <i class="ri-refresh-line"></i>
+            </button>
+            <button class="action-btn" onclick="showSettings()" title="Settings">
+                <i class="ri-settings-4-line"></i>
+            </button>
+            <button class="action-btn" onclick="showHelp()" title="Help">
+                <i class="ri-question-line"></i>
+            </button>
+        </div>
+    </div>
+</aside>
+
+<style>
+/* Enhanced Sidebar Styles */
+.sidebar {
+    width: 280px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #128C7E);
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary), #128C7E);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    box-shadow: var(--shadow-md);
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+}
+
+.brand-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, var(--primary), #128C7E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sidebar-subtitle {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    font-weight: 500;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--muted-foreground);
+}
+
+.sidebar-toggle:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+}
+
+.sidebar-navigation {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.nav-section {
+    margin-bottom: 2rem;
+}
+
+.nav-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+    padding: 0 0.5rem;
+}
+
+.nav-section-title i {
+    font-size: 1rem;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 0.25rem;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(37, 211, 102, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.nav-item a:hover::before {
+    left: 100%;
+}
+
+.nav-item a:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-item a.active {
+    background: linear-gradient(135deg, var(--primary), #128C7E);
+    color: var(--primary-foreground);
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.02);
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.nav-text {
+    flex: 1;
+    font-size: 0.875rem;
+}
+
+.nav-badge {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    font-size: 0.625rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-indicator {
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-item a.active .nav-indicator {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--muted);
+}
+
+.connection-status {
+    margin-bottom: 1rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.status-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.status-details {
+    margin-left: 1rem;
+}
+
+.status-info {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+}
+
+.sidebar-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        left: -100%;
+        height: 100%;
+        z-index: 100;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+}
+
+@media (min-width: 769px) {
+    .sidebar-toggle {
+        display: none;
+    }
+}
+</style>
+
+<script>
+// Sidebar functionality
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('open');
+}
+
+function refreshConnection() {
+    // Add refresh connection logic here
+    console.log('Refreshing connection...');
+}
+
+function showSettings() {
+    // Add settings modal logic here
+    console.log('Opening settings...');
+}
+
+function showHelp() {
+    // Add help modal logic here
+    console.log('Opening help...');
+}
+
+// Close sidebar on mobile when clicking outside
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    
+    if (window.innerWidth <= 768 && 
+        !sidebar.contains(event.target) && 
+        !sidebarToggle.contains(event.target)) {
+        sidebar.classList.remove('open');
+    }
+});
+</script>
+
+

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include("partials/head", { title: "Contact Us" }) %>
+    <style>
+        .legal-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .legal-content {
+            flex: 1;
+        }
+        
+        .legal-section {
+            margin-bottom: 2rem;
+        }
+        
+        .legal-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .legal-section h3 {
+            color: var(--foreground);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .legal-section p {
+            color: var(--muted-foreground);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .legal-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--muted-foreground);
+        }
+        
+        .legal-section li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="legal-page">
+    <%- include("partials/header") %>
+    
+    <div class="dashboard-layout legal-content">
+        <%- include("partials/sidebar") %>
+        <div class="main-content">
+            <%- include("partials/navbar", { title: "Contact Us" }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-mail-line card-icon"></i>
+                                    Contact Us
+                                </h1>
+                                <p>We are here to help and answer any question you might have. We look forward to hearing from you.</p>
+                            </div>
+                            
+                            <div class="legal-section">
+                                <h2>General Inquiries</h2>
+                                <p>For general questions about our service, features, or pricing, please reach out to us via email or our support portal.</p>
+                                <ul>
+                                    <li><strong>Email:</strong> support@wahyuofficial.my.id</li>
+                                    <li><strong>Support Portal:</strong> <a href="/support">/support</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="legal-section">
+                                <h2>Technical Support</h2>
+                                <p>If you are experiencing technical issues, bugs, or need assistance with API integration, our technical support team is ready to assist you.</p>
+                                <ul>
+                                    <li><strong>Email:</strong> techsupport@wahyuofficial.my.id</li>
+                                    <li><strong>Report an Issue:</strong> <a href="/report-issues">/report-issues</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="legal-section">
+                                <h2>Business Partnerships</h2>
+                                <p>For partnership opportunities, collaborations, or media inquiries, please contact our business development team.</p>
+                                <ul>
+                                    <li><strong>Email:</strong> partnerships@wahyuofficial.my.id</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="legal-section">
+                                <h2>Our Office</h2>
+                                <p>While we primarily operate online, you can reach us at our mailing address:</p>
+                                <address>
+                                    WhatsApp Webhook API Headquarters<br>
+                                    123 API Lane<br>
+                                    Jakarta, Indonesia 12345
+                                </address>
+                            </div>
+                            
+                            <div class="legal-section">
+                                <h2>Social Media</h2>
+                                <p>Follow us on social media for the latest updates, news, and tips:</p>
+                                <ul>
+                                    <li><a href="#">Twitter</a></li>
+                                    <li><a href="#">LinkedIn</a></li>
+                                    <li><a href="#">Facebook</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include("partials/footer") %>
+    <%- include("partials/scripts") %>
+</body>
+</html>
+

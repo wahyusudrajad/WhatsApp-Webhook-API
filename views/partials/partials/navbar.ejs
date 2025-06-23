@@ -1,0 +1,925 @@
+<header class="navbar">
+    <div class="navbar-left">
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <i class="ri-menu-line"></i>
+        </button>
+        <div class="navbar-title">
+            <i class="ri-dashboard-3-line"></i>
+            <%= typeof title !== 'undefined' ? title : 'Dashboard' %>
+        </div>
+    </div>
+    
+    <div class="navbar-center">
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <i class="ri-search-line search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search anything..." />
+                <div class="search-shortcut">
+                    <span>⌘K</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="navbar-right">
+        <div class="navbar-actions">
+            <button class="action-button" onclick="showNotifications()" title="Notifications">
+                <i class="ri-notification-3-line"></i>
+                <span class="notification-badge">3</span>
+            </button>
+            
+            <button class="action-button" onclick="showMessages()" title="Messages">
+                <i class="ri-message-3-line"></i>
+                <span class="message-indicator"></span>
+            </button>
+            
+            <button class="action-button" onclick="showQuickActions()" title="Quick Actions">
+                <i class="ri-add-circle-line"></i>
+            </button>
+            
+            <div class="divider"></div>
+            
+            <form id="logoutForm" action="/logout-user" method="POST" style="margin: 0;">
+                <button type="submit" class="btn-logout" title="Logout">
+                    <i class="ri-logout-box-line"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- Notifications Dropdown -->
+<div class="notifications-dropdown" id="notificationsDropdown">
+    <div class="dropdown-header">
+        <h3>
+            <i class="ri-notification-3-fill"></i>
+            Notifications
+        </h3>
+        <button class="mark-all-read" onclick="markAllRead()">
+            <i class="ri-check-double-line"></i>
+            Mark all read
+        </button>
+    </div>
+    <div class="notifications-list">
+        <div class="notification-item unread">
+            <div class="notification-icon success">
+                <i class="ri-check-line"></i>
+            </div>
+            <div class="notification-content">
+                <h4>Message sent successfully</h4>
+                <p>Your message to +62812345678 was delivered</p>
+                <span class="notification-time">2 minutes ago</span>
+            </div>
+        </div>
+        <div class="notification-item unread">
+            <div class="notification-icon warning">
+                <i class="ri-alert-line"></i>
+            </div>
+            <div class="notification-content">
+                <h4>API rate limit warning</h4>
+                <p>You're approaching your daily API limit</p>
+                <span class="notification-time">5 minutes ago</span>
+            </div>
+        </div>
+        <div class="notification-item">
+            <div class="notification-icon info">
+                <i class="ri-information-line"></i>
+            </div>
+            <div class="notification-content">
+                <h4>New contact added</h4>
+                <p>John Doe has been added to your contacts</p>
+                <span class="notification-time">1 hour ago</span>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-footer">
+        <a href="/notifications" class="view-all-link">
+            <i class="ri-external-link-line"></i>
+            View all notifications
+        </a>
+    </div>
+</div>
+
+<style>
+/* Enhanced Navbar Styles */
+.navbar {
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--muted-foreground);
+}
+
+.mobile-menu-toggle:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+}
+
+.navbar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.navbar-title i {
+    color: var(--primary);
+    font-size: 1.75rem;
+}
+
+.navbar-center {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+    background: var(--card);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--muted-foreground);
+    font-size: 1.125rem;
+    z-index: 1;
+}
+
+.search-shortcut {
+    position: absolute;
+    right: 1rem;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-button {
+    position: relative;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--muted-foreground);
+    box-shadow: var(--shadow-sm);
+}
+
+.action-button:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.action-button i {
+    font-size: 1.25rem;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    font-size: 0.625rem;
+    font-weight: 600;
+    padding: 0.125rem 0.375rem;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.message-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 0.5rem;
+}
+
+.btn-logout {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-logout:hover {
+    background: var(--destructive);
+    color: var(--destructive-foreground);
+    border-color: var(--destructive);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Notifications Dropdown */
+.notifications-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-xl);
+    z-index: 1001;
+    width: 380px;
+    max-height: 500px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(20px);
+}
+
+.notifications-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdown-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.dropdown-header h3 i {
+    color: var(--primary);
+}
+
+.mark-all-read {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.mark-all-read:hover {
+    background: rgba(37, 211, 102, 0.1);
+}
+
+.notifications-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: var(--accent);
+}
+
+.notification-item.unread {
+    background: rgba(37, 211, 102, 0.05);
+    border-left: 3px solid var(--primary);
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.125rem;
+}
+
+.notification-icon.success {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.notification-icon.warning {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.notification-icon.info {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0 0 0.25rem 0;
+}
+
+.notification-content p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.notification-time {
+    font-size: 0.625rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+}
+
+.dropdown-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.view-all-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+    background: rgba(37, 211, 102, 0.1);
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    .navbar-center {
+        display: none;
+    }
+    
+    .navbar-actions {
+        gap: 0.25rem;
+    }
+    
+    .action-button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .btn-logout span {
+        display: none;
+    }
+    
+    .notifications-dropdown {
+        width: calc(100vw - 2rem);
+        right: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-title {
+        font-size: 1.25rem;
+    }
+    
+    .divider {
+        display: none;
+    }
+}
+</style>
+
+<script>
+// Enhanced Navbar functionality with API integration
+let notificationUpdateInterval;
+
+// Initialize notifications when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadNotifications();
+    updateNotificationCount();
+    
+    // Update notifications every 30 seconds
+    notificationUpdateInterval = setInterval(() => {
+        loadNotifications();
+        updateNotificationCount();
+    }, 30000);
+    
+    const searchInput = document.querySelector('.search-input');
+    
+    if (searchInput) {
+        // Add keyboard shortcut (Cmd+K or Ctrl+K)
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+        
+        searchInput.addEventListener('input', function(e) {
+            // Add search functionality here
+            console.log('Searching for:', e.target.value);
+        });
+    }
+});
+
+// Load notifications from API
+async function loadNotifications() {
+    try {
+        const response = await fetch('/api/notifications/messages?limit=5');
+        const data = await response.json();
+        
+        if (data.success && data.notifications) {
+            updateNotificationsList(data.notifications);
+        }
+    } catch (error) {
+        console.error('Error loading notifications:', error);
+    }
+}
+
+// Update notification count
+async function updateNotificationCount() {
+    try {
+        const response = await fetch('/api/notifications/count');
+        const data = await response.json();
+        
+        if (data.success) {
+            const badge = document.querySelector('.notification-badge');
+            if (badge) {
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.style.display = 'block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error updating notification count:', error);
+    }
+}
+
+// Update notifications list in dropdown
+function updateNotificationsList(notifications) {
+    const notificationsList = document.querySelector('.notifications-list');
+    if (!notificationsList) return;
+    
+    if (notifications.length === 0) {
+        notificationsList.innerHTML = `
+            <div class="notification-item" style="text-align: center; padding: 2rem;">
+                <div style="color: var(--muted-foreground);">
+                    <i class="ri-notification-off-line" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    <p>No new notifications</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    notificationsList.innerHTML = notifications.map(notification => {
+        const timeAgo = getTimeAgo(new Date(notification.timestamp));
+        const iconClass = getNotificationIcon(notification.type);
+        
+        return `
+            <div class="notification-item unread" onclick="viewMessage('${notification.id}')">
+                <div class="notification-icon info">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>${notification.title}</h4>
+                    <p>${notification.message}</p>
+                    <span class="notification-time">${timeAgo}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Get appropriate icon for notification type
+function getNotificationIcon(type) {
+    switch (type) {
+        case 'message':
+            return 'ri-message-3-line';
+        case 'system':
+            return 'ri-settings-line';
+        case 'warning':
+            return 'ri-alert-line';
+        default:
+            return 'ri-notification-3-line';
+    }
+}
+
+// Calculate time ago
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) {
+        return 'Just now';
+    } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else {
+        const days = Math.floor(diffInSeconds / 86400);
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+    }
+}
+
+// View message details
+async function viewMessage(messageId) {
+    try {
+        const response = await fetch(`/api/messages/${messageId}`);
+        const data = await response.json();
+        
+        if (data.success && data.message) {
+            showMessageModal(data.message);
+        }
+    } catch (error) {
+        console.error('Error loading message details:', error);
+    }
+}
+
+// Show message modal
+function showMessageModal(message) {
+    const modal = document.createElement('div');
+    modal.className = 'message-modal-overlay';
+    modal.innerHTML = `
+        <div class="message-modal">
+            <div class="message-modal-header">
+                <h3><i class="ri-message-3-line"></i> Message Details</h3>
+                <button class="close-modal" onclick="closeMessageModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="message-modal-content">
+                <div class="message-info">
+                    <div class="info-item">
+                        <label>From:</label>
+                        <span>${message.sender}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Chat ID:</label>
+                        <span>${message.chat_jid}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Time:</label>
+                        <span>${new Date(message.timestamp).toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="message-text">
+                    <label>Message:</label>
+                    <div class="message-content">${message.message}</div>
+                </div>
+            </div>
+            <div class="message-modal-footer">
+                <button class="btn-reply" onclick="replyToMessage('${message.chat_jid}')">
+                    <i class="ri-reply-line"></i>
+                    Reply
+                </button>
+                <button class="btn-close" onclick="closeMessageModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add modal styles
+    if (!document.getElementById('messageModalStyles')) {
+        const styles = document.createElement('style');
+        styles.id = 'messageModalStyles';
+        styles.textContent = `
+            .message-modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                backdrop-filter: blur(4px);
+            }
+            
+            .message-modal {
+                background: var(--card);
+                border-radius: 16px;
+                box-shadow: var(--shadow-xl);
+                max-width: 500px;
+                width: 90%;
+                max-height: 80vh;
+                overflow: hidden;
+                animation: modalSlideIn 0.3s ease-out;
+            }
+            
+            @keyframes modalSlideIn {
+                from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            
+            .message-modal-header {
+                padding: 1.5rem;
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .message-modal-header h3 {
+                margin: 0;
+                color: var(--foreground);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .close-modal {
+                background: none;
+                border: none;
+                color: var(--muted-foreground);
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+            }
+            
+            .close-modal:hover {
+                background: var(--accent);
+                color: var(--accent-foreground);
+            }
+            
+            .message-modal-content {
+                padding: 1.5rem;
+                max-height: 400px;
+                overflow-y: auto;
+            }
+            
+            .message-info {
+                margin-bottom: 1.5rem;
+            }
+            
+            .info-item {
+                display: flex;
+                margin-bottom: 0.75rem;
+            }
+            
+            .info-item label {
+                font-weight: 600;
+                color: var(--muted-foreground);
+                min-width: 80px;
+            }
+            
+            .info-item span {
+                color: var(--foreground);
+            }
+            
+            .message-text label {
+                font-weight: 600;
+                color: var(--muted-foreground);
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+            
+            .message-content {
+                background: var(--accent);
+                padding: 1rem;
+                border-radius: 8px;
+                color: var(--foreground);
+                line-height: 1.6;
+                white-space: pre-wrap;
+            }
+            
+            .message-modal-footer {
+                padding: 1.5rem;
+                border-top: 1px solid var(--border);
+                display: flex;
+                gap: 1rem;
+                justify-content: flex-end;
+            }
+            
+            .btn-reply, .btn-close {
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .btn-reply {
+                background: var(--primary);
+                color: white;
+                border: none;
+            }
+            
+            .btn-reply:hover {
+                background: #128C7E;
+            }
+            
+            .btn-close {
+                background: var(--secondary);
+                color: var(--secondary-foreground);
+                border: 1px solid var(--border);
+            }
+            
+            .btn-close:hover {
+                background: var(--accent);
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+}
+
+// Close message modal
+function closeMessageModal() {
+    const modal = document.querySelector('.message-modal-overlay');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Reply to message
+function replyToMessage(chatJid) {
+    closeMessageModal();
+    // Redirect to send message page or open compose modal
+    window.location.href = `/dashboard?reply_to=${encodeURIComponent(chatJid)}`;
+}
+
+function showNotifications() {
+    const dropdown = document.getElementById('notificationsDropdown');
+    dropdown.classList.toggle('show');
+    
+    // Close other dropdowns
+    document.querySelectorAll('.dropdown').forEach(d => {
+        if (d !== dropdown) d.classList.remove('show');
+    });
+}
+
+function showMessages() {
+    // Add messages functionality here
+    console.log('Opening messages...');
+}
+
+function showQuickActions() {
+    // Add quick actions functionality here
+    console.log('Opening quick actions...');
+}
+
+function markAllRead() {
+    document.querySelectorAll('.notification-item.unread').forEach(item => {
+        item.classList.remove('unread');
+    });
+    
+    const badge = document.querySelector('.notification-badge');
+    if (badge) {
+        badge.style.display = 'none';
+    }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    const notificationsDropdown = document.getElementById('notificationsDropdown');
+    const notificationButton = document.querySelector('[onclick="showNotifications()"]');
+    
+    if (notificationButton && !notificationButton.contains(event.target) && !notificationsDropdown.contains(event.target)) {
+        notificationsDropdown.classList.remove('show');
+    }
+});
+
+// Clean up interval when page unloads
+window.addEventListener('beforeunload', function() {
+    if (notificationUpdateInterval) {
+        clearInterval(notificationUpdateInterval);
+    }
+});
+</script>
+

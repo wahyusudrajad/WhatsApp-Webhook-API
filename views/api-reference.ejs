@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include('partials/head', { title: 'API Reference' }) %>
+    <style>
+        .api-reference-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .api-reference-content {
+            flex: 1;
+        }
+        
+        .api-section {
+            margin-bottom: 2rem;
+        }
+        
+        .api-endpoint {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .method-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        
+        .method-post { background: #28a745; color: white; }
+        .method-get { background: #007bff; color: white; }
+        .method-put { background: #ffc107; color: #212529; }
+        .method-delete { background: #dc3545; color: white; }
+        
+        .endpoint-url {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+        
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .params-table th,
+        .params-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .params-table th {
+            background: var(--muted);
+            font-weight: 600;
+            color: var(--foreground);
+        }
+        
+        .param-name {
+            font-family: 'Fira Code', monospace;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .param-type {
+            color: var(--muted-foreground);
+            font-style: italic;
+        }
+        
+        .required {
+            color: var(--destructive);
+            font-weight: 600;
+        }
+        
+        .optional {
+            color: var(--muted-foreground);
+        }
+        
+        .code-example {
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+        
+        [data-theme="dark"] .code-example {
+            background: #1a1a1a;
+            color: #f1f1f1;
+        }
+        
+        .response-example {
+            background: var(--accent);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-code {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        
+        .status-200 { background: #d4edda; color: #155724; }
+        .status-400 { background: #f8d7da; color: #721c24; }
+        .status-401 { background: #fff3cd; color: #856404; }
+        .status-500 { background: #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body class="api-reference-page">
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-layout api-reference-content">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'API Reference' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-code-s-slash-line card-icon"></i>
+                                    API Reference
+                                </h1>
+                                <p>Complete reference for all WhatsApp Webhook API endpoints</p>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Authentication</h2>
+                                <p>All API requests require authentication using Bearer token in the Authorization header.</p>
+                                <div class="code-example">
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+                                </div>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Message Endpoints</h2>
+                                
+                                <div class="api-endpoint">
+                                    <div class="endpoint-header">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="endpoint-url">/api/whatsapp/send</span>
+                                    </div>
+                                    <p>Send a WhatsApp message to a specific phone number.</p>
+                                    
+                                    <h4>Parameters</h4>
+                                    <table class="params-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Type</th>
+                                                <th>Required</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="param-name">to</td>
+                                                <td class="param-type">string</td>
+                                                <td class="required">Required</td>
+                                                <td>Phone number with country code (e.g., +6281234567890)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="param-name">message</td>
+                                                <td class="param-type">string</td>
+                                                <td class="required">Required</td>
+                                                <td>Message content to send</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <h4>Request Example</h4>
+                                    <div class="code-example">
+{
+  "to": "+6281234567890",
+  "message": "Hello from WhatsApp API!"
+}
+                                    </div>
+                                    
+                                    <h4>Response</h4>
+                                    <div class="response-example">
+                                        <span class="status-code status-200">200 OK</span>
+                                        <div class="code-example">
+{
+  "success": true,
+  "messageId": "msg_123456789",
+  "timestamp": "2024-01-01T12:00:00Z"
+}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="api-endpoint">
+                                    <div class="endpoint-header">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="endpoint-url">/api/whatsapp/send-bulk</span>
+                                    </div>
+                                    <p>Send WhatsApp messages to multiple recipients.</p>
+                                    
+                                    <h4>Parameters</h4>
+                                    <table class="params-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Type</th>
+                                                <th>Required</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="param-name">recipients</td>
+                                                <td class="param-type">array</td>
+                                                <td class="required">Required</td>
+                                                <td>Array of phone numbers</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="param-name">message</td>
+                                                <td class="param-type">string</td>
+                                                <td class="required">Required</td>
+                                                <td>Message content to send</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="param-name">delay</td>
+                                                <td class="param-type">number</td>
+                                                <td class="optional">Optional</td>
+                                                <td>Delay between messages in seconds (default: 2)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Status Endpoints</h2>
+                                
+                                <div class="api-endpoint">
+                                    <div class="endpoint-header">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="endpoint-url">/api/whatsapp/status</span>
+                                    </div>
+                                    <p>Get the current WhatsApp connection status.</p>
+                                    
+                                    <h4>Response</h4>
+                                    <div class="response-example">
+                                        <span class="status-code status-200">200 OK</span>
+                                        <div class="code-example">
+{
+  "status": "connected",
+  "qr": null,
+  "user": {
+    "id": "6281234567890",
+    "name": "Your Name",
+    "pushName": "Display Name"
+  },
+  "battery": 85,
+  "plugged": true
+}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="api-endpoint">
+                                    <div class="endpoint-header">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="endpoint-url">/api/whatsapp/logout</span>
+                                    </div>
+                                    <p>Logout from the current WhatsApp session.</p>
+                                    
+                                    <h4>Response</h4>
+                                    <div class="response-example">
+                                        <span class="status-code status-200">200 OK</span>
+                                        <div class="code-example">
+{
+  "success": true,
+  "message": "Logged out successfully"
+}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Webhook Endpoints</h2>
+                                
+                                <div class="api-endpoint">
+                                    <div class="endpoint-header">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="endpoint-url">/api/webhook</span>
+                                    </div>
+                                    <p>Receive incoming WhatsApp messages via webhook.</p>
+                                    
+                                    <h4>Webhook Payload</h4>
+                                    <div class="code-example">
+{
+  "type": "message",
+  "data": {
+    "from": "+6281234567890",
+    "fromName": "John Doe",
+    "message": "Hello!",
+    "messageId": "msg_123456",
+    "timestamp": "2024-01-01T12:00:00Z",
+    "chatId": "6281234567890@c.us"
+  }
+}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Error Responses</h2>
+                                
+                                <div class="response-example">
+                                    <span class="status-code status-400">400 Bad Request</span>
+                                    <div class="code-example">
+{
+  "success": false,
+  "error": "Missing required parameter: to",
+  "code": "MISSING_PARAMETER"
+}
+                                    </div>
+                                </div>
+                                
+                                <div class="response-example">
+                                    <span class="status-code status-401">401 Unauthorized</span>
+                                    <div class="code-example">
+{
+  "success": false,
+  "error": "Invalid API key",
+  "code": "INVALID_API_KEY"
+}
+                                    </div>
+                                </div>
+                                
+                                <div class="response-example">
+                                    <span class="status-code status-500">500 Internal Server Error</span>
+                                    <div class="code-example">
+{
+  "success": false,
+  "error": "WhatsApp not connected",
+  "code": "WHATSAPP_NOT_CONNECTED"
+}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="api-section">
+                                <h2>Rate Limits</h2>
+                                <p>To ensure service stability, the following rate limits apply:</p>
+                                <ul>
+                                    <li><strong>Message sending:</strong> 30 messages per minute</li>
+                                    <li><strong>Status checks:</strong> 60 requests per minute</li>
+                                    <li><strong>Bulk messaging:</strong> 10 requests per minute</li>
+                                </ul>
+                                
+                                <p>When rate limits are exceeded, you'll receive a <code>429 Too Many Requests</code> response.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+</body>
+</html>
+

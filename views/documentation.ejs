@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include("partials/head", { title: "Documentation" }) %>
+    <style>
+        .documentation-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .documentation-content {
+            flex: 1;
+        }
+        
+        .doc-section {
+            margin-bottom: 3rem;
+        }
+        
+        .doc-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .doc-section h3 {
+            color: var(--foreground);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+        
+        .code-block {
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+        
+        [data-theme="dark"] .code-block {
+            background: #1a1a1a;
+            color: #f1f1f1;
+        }
+        
+        .endpoint {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-right: 0.5rem;
+        }
+        
+        .method.post {
+            background: #28a745;
+            color: white;
+        }
+        
+        .method.get {
+            background: #007bff;
+            color: white;
+        }
+        
+        .method.delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .parameter {
+            background: var(--accent);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+        }
+        
+        .parameter-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .parameter-type {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+        
+        .toc {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc li {
+            margin: 0.5rem 0;
+        }
+        
+        .toc a {
+            color: var(--foreground);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .toc a:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body class="documentation-page">
+    <%- include("partials/header") %>
+    
+    <div class="dashboard-layout documentation-content">
+        <%- include("partials/sidebar") %>
+        <div class="main-content">
+            <%- include("partials/navbar", { title: "Documentation" }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-book-open-line card-icon"></i>
+                                    WhatsApp Webhook API Documentation
+                                </h1>
+                            </div>
+                            
+                            <div class="toc">
+                                <h3><i class="ri-list-unordered"></i> Table of Contents</h3>
+                                <ul>
+                                    <li><a href="#getting-started"><i class="ri-play-line"></i> Getting Started</a></li>
+                                    <li><a href="#authentication"><i class="ri-shield-check-line"></i> Authentication</a></li>
+                                    <li><a href="#endpoints"><i class="ri-code-line"></i> API Endpoints</a></li>
+                                    <li><a href="#webhooks"><i class="ri-webhook-line"></i> Webhooks</a></li>
+                                    <li><a href="#examples"><i class="ri-file-code-line"></i> Code Examples</a></li>
+                                    <li><a href="#errors"><i class="ri-error-warning-line"></i> Error Handling</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="doc-section" id="getting-started">
+                                <h2><i class="ri-play-line"></i> Getting Started</h2>
+                                <p>Welcome to the WhatsApp Webhook API documentation. This API allows you to send WhatsApp messages, manage contacts, and handle incoming messages through webhooks.</p>
+                                
+                                <h3>Base URL</h3>
+                                <div class="code-block">
+                                    https://your-domain.com/api
+                                </div>
+                                
+                                <h3>Requirements</h3>
+                                <ul>
+                                    <li>Valid API key</li>
+                                    <li>WhatsApp Business account</li>
+                                    <li>QR code scan for initial setup</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="doc-section" id="authentication">
+                                <h2><i class="ri-shield-check-line"></i> Authentication</h2>
+                                <p>All API requests require authentication using an API key. Include your API key in the request headers:</p>
+                                
+                                <div class="code-block">
+                                    Authorization: Bearer YOUR_API_KEY
+                                    Content-Type: application/json
+                                </div>
+                            </div>
+                            
+                            <div class="doc-section" id="endpoints">
+                                <h2><i class="ri-code-line"></i> API Endpoints</h2>
+                                
+                                <div class="endpoint">
+                                    <h3>
+                                        <span class="method post">POST</span>
+                                        /whatsapp/send
+                                    </h3>
+                                    <p>Send a WhatsApp message to a specific number.</p>
+                                    
+                                    <h4>Parameters</h4>
+                                    <div class="parameter">
+                                        <div class="parameter-name">to</div>
+                                        <div class="parameter-type">string (required)</div>
+                                        <div>Phone number with country code (e.g., +6281234567890)</div>
+                                    </div>
+                                    <div class="parameter">
+                                        <div class="parameter-name">message</div>
+                                        <div class="parameter-type">string (required)</div>
+                                        <div>Message content to send</div>
+                                    </div>
+                                    
+                                    <h4>Example Request</h4>
+                                    <div class="code-block">
+{
+  "to": "+6281234567890",
+  "message": "Hello from WhatsApp API!"
+}
+                                    </div>
+                                </div>
+                                
+                                <div class="endpoint">
+                                    <h3>
+                                        <span class="method get">GET</span>
+                                        /whatsapp/status
+                                    </h3>
+                                    <p>Get the current connection status of WhatsApp.</p>
+                                    
+                                    <h4>Response</h4>
+                                    <div class="code-block">
+{
+  "status": "connected",
+  "qr": null,
+  "user": {
+    "id": "6281234567890",
+    "name": "Your Name"
+  }
+}
+                                    </div>
+                                </div>
+                                
+                                <div class="endpoint">
+                                    <h3>
+                                        <span class="method post">POST</span>
+                                        /whatsapp/logout
+                                    </h3>
+                                    <p>Logout from WhatsApp session.</p>
+                                    
+                                    <h4>Response</h4>
+                                    <div class="code-block">
+{
+  "success": true,
+  "message": "Logged out successfully"
+}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="doc-section" id="webhooks">
+                                <h2><i class="ri-webhook-line"></i> Webhooks</h2>
+                                <p>Configure webhooks to receive real-time notifications about incoming messages.</p>
+                                
+                                <h3>Webhook URL</h3>
+                                <div class="code-block">
+                                    POST https://your-webhook-url.com/webhook
+                                </div>
+                                
+                                <h3>Webhook Payload</h3>
+                                <div class="code-block">
+{
+  "type": "message",
+  "data": {
+    "from": "+6281234567890",
+    "message": "Hello!",
+    "timestamp": "2024-01-01T12:00:00Z",
+    "messageId": "msg_123456"
+  }
+}
+                                </div>
+                            </div>
+                            
+                            <div class="doc-section" id="examples">
+                                <h2><i class="ri-file-code-line"></i> Code Examples</h2>
+                                
+                                <h3>JavaScript (Node.js)</h3>
+                                <div class="code-block">
+const axios = require('axios');
+
+async function sendMessage(to, message) {
+  try {
+    const response = await axios.post('https://your-domain.com/api/whatsapp/send', {
+      to: to,
+      message: message
+    }, {
+      headers: {
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    console.log('Message sent:', response.data);
+  } catch (error) {
+    console.error('Error:', error.response.data);
+  }
+}
+
+sendMessage('+6281234567890', 'Hello from Node.js!');
+                                </div>
+                                
+                                <h3>Python</h3>
+                                <div class="code-block">
+import requests
+
+def send_message(to, message):
+    url = 'https://your-domain.com/api/whatsapp/send'
+    headers = {
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        'to': to,
+        'message': message
+    }
+    
+    response = requests.post(url, json=data, headers=headers)
+    return response.json()
+
+result = send_message('+6281234567890', 'Hello from Python!')
+print(result)
+                                </div>
+                                
+                                <h3>PHP</h3>
+                                <div class="code-block">
+<?php
+function sendMessage($to, $message) {
+    $url = 'https://your-domain.com/api/whatsapp/send';
+    $data = json_encode([
+        'to' => $to,
+        'message' => $message
+    ]);
+    
+    $options = [
+        'http' => [
+            'header' => [
+                'Authorization: Bearer YOUR_API_KEY',
+                'Content-Type: application/json'
+            ],
+            'method' => 'POST',
+            'content' => $data
+        ]
+    ];
+    
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    return json_decode($result, true);
+}
+
+$result = sendMessage('+6281234567890', 'Hello from PHP!');
+print_r($result);
+?>
+                                </div>
+                            </div>
+                            
+                            <div class="doc-section" id="errors">
+                                <h2><i class="ri-error-warning-line"></i> Error Handling</h2>
+                                <p>The API uses standard HTTP status codes to indicate success or failure.</p>
+                                
+                                <h3>Status Codes</h3>
+                                <div class="parameter">
+                                    <div class="parameter-name">200 OK</div>
+                                    <div>Request successful</div>
+                                </div>
+                                <div class="parameter">
+                                    <div class="parameter-name">400 Bad Request</div>
+                                    <div>Invalid request parameters</div>
+                                </div>
+                                <div class="parameter">
+                                    <div class="parameter-name">401 Unauthorized</div>
+                                    <div>Invalid or missing API key</div>
+                                </div>
+                                <div class="parameter">
+                                    <div class="parameter-name">500 Internal Server Error</div>
+                                    <div>Server error occurred</div>
+                                </div>
+                                
+                                <h3>Error Response Format</h3>
+                                <div class="code-block">
+{
+  "success": false,
+  "error": "Error message description",
+  "code": "ERROR_CODE"
+}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include("partials/footer") %>
+    <%- include("partials/scripts") %>
+</body>
+</html>
+

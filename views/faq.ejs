@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <%- include('partials/head', { title: 'FAQ' }) %>
+    <style>
+        .faq-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .faq-content {
+            flex: 1;
+        }
+        
+        .faq-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            background: var(--card);
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--foreground);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: var(--accent);
+        }
+        
+        .faq-question.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .faq-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--card);
+        }
+        
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--muted-foreground);
+        }
+        
+        .faq-answer ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+            color: var(--muted-foreground);
+        }
+        
+        .faq-category {
+            margin-bottom: 2rem;
+        }
+        
+        .faq-category h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .search-box {
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card);
+            color: var(--foreground);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted-foreground);
+            display: none;
+        }
+        
+        .code-snippet {
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+        
+        [data-theme="dark"] .code-snippet {
+            background: #1a1a1a;
+            color: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="faq-page">
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-layout faq-content">
+        <%- include('partials/sidebar') %>
+        <div class="main-content">
+            <%- include('partials/navbar', { title: 'FAQ' }) %>
+            <main class="content-wrapper">
+                <div class="grid-container">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <i class="ri-question-answer-line card-icon"></i>
+                                    Frequently Asked Questions
+                                </h1>
+                                <p>Find answers to common questions about WhatsApp Webhook API</p>
+                            </div>
+                            
+                            <div class="search-box">
+                                <input type="text" class="search-input" placeholder="Search FAQ..." id="faqSearch">
+                            </div>
+                            
+                            <div class="faq-category">
+                                <h2><i class="ri-play-line"></i> Getting Started</h2>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        What is WhatsApp Webhook API?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>WhatsApp Webhook API is a service that allows you to send and receive WhatsApp messages programmatically. It provides RESTful endpoints for sending messages, managing contacts, and receiving incoming messages through webhooks.</p>
+                                        <p>Key features include:</p>
+                                        <ul>
+                                            <li>Send text messages to any WhatsApp number</li>
+                                            <li>Bulk message broadcasting</li>
+                                            <li>Real-time message receiving via webhooks</li>
+                                            <li>Contact management</li>
+                                            <li>Auto-reply functionality</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How do I get started with the API?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>To get started with WhatsApp Webhook API:</p>
+                                        <ul>
+                                            <li>Create an account and log in to the dashboard</li>
+                                            <li>Scan the QR code with your WhatsApp mobile app</li>
+                                            <li>Generate an API key from the API Keys section</li>
+                                            <li>Start making API calls using your API key</li>
+                                        </ul>
+                                        <p>Check our <a href="/documentation">Documentation</a> for detailed setup instructions.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Do I need a WhatsApp Business account?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>No, you can use any regular WhatsApp account. However, we recommend using a dedicated WhatsApp account for API usage to avoid conflicts with personal messaging.</p>
+                                        <p>For business use cases, WhatsApp Business accounts provide additional features like business profiles and automated messages.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-category">
+                                <h2><i class="ri-code-line"></i> API Usage</h2>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How do I send a message using the API?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>To send a message, make a POST request to the <code>/api/whatsapp/send</code> endpoint:</p>
+                                        <div class="code-snippet">
+curl -X POST https://your-domain.com/api/whatsapp/send \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to": "+6281234567890",
+    "message": "Hello from API!"
+  }'
+                                        </div>
+                                        <p>Make sure to include the country code in the phone number.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        What phone number formats are supported?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Phone numbers must include the country code and can be formatted in several ways:</p>
+                                        <ul>
+                                            <li><code>+6281234567890</code> (recommended)</li>
+                                            <li><code>6281234567890</code></li>
+                                            <li><code>081234567890</code> (for Indonesian numbers)</li>
+                                        </ul>
+                                        <p>The API automatically normalizes phone numbers to the international format.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Are there any rate limits?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Yes, to ensure service stability, we implement the following rate limits:</p>
+                                        <ul>
+                                            <li><strong>Message sending:</strong> 30 messages per minute</li>
+                                            <li><strong>Status checks:</strong> 60 requests per minute</li>
+                                            <li><strong>Bulk messaging:</strong> 10 requests per minute</li>
+                                        </ul>
+                                        <p>If you exceed these limits, you'll receive a <code>429 Too Many Requests</code> response.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-category">
+                                <h2><i class="ri-webhook-line"></i> Webhooks</h2>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How do webhooks work?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Webhooks allow you to receive real-time notifications when messages are received. Configure a webhook URL in your dashboard, and we'll send HTTP POST requests to that URL whenever a message arrives.</p>
+                                        <p>Webhook payload example:</p>
+                                        <div class="code-snippet">
+{
+  "type": "message",
+  "data": {
+    "from": "+6281234567890",
+    "message": "Hello!",
+    "timestamp": "2024-01-01T12:00:00Z",
+    "messageId": "msg_123456"
+  }
+}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How can I verify webhook authenticity?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>All webhook requests include a signature header that you can use to verify the request came from our servers. Check the <code>X-Webhook-Signature</code> header and compare it with your webhook secret.</p>
+                                        <p>We recommend implementing webhook verification to ensure security.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-category">
+                                <h2><i class="ri-error-warning-line"></i> Troubleshooting</h2>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Why am I getting "WhatsApp not connected" errors?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>This error occurs when your WhatsApp session is not active. Common causes:</p>
+                                        <ul>
+                                            <li>QR code hasn't been scanned</li>
+                                            <li>WhatsApp session expired</li>
+                                            <li>Phone is offline or WhatsApp app is closed</li>
+                                            <li>Account was logged out from another device</li>
+                                        </ul>
+                                        <p>Solution: Go to your dashboard and scan the QR code again to reconnect.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Messages are not being delivered. What should I do?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>If messages aren't being delivered, check the following:</p>
+                                        <ul>
+                                            <li>Verify the phone number format includes country code</li>
+                                            <li>Ensure the recipient has WhatsApp installed</li>
+                                            <li>Check if your WhatsApp is connected (green status)</li>
+                                            <li>Verify you haven't exceeded rate limits</li>
+                                            <li>Make sure your phone has internet connection</li>
+                                        </ul>
+                                        <p>Check the Activity Logs section for detailed error messages.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How do I handle API errors?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>The API returns standard HTTP status codes. Common error responses:</p>
+                                        <ul>
+                                            <li><code>400</code> - Bad Request (invalid parameters)</li>
+                                            <li><code>401</code> - Unauthorized (invalid API key)</li>
+                                            <li><code>429</code> - Too Many Requests (rate limit exceeded)</li>
+                                            <li><code>500</code> - Internal Server Error (service issue)</li>
+                                        </ul>
+                                        <p>Always check the response body for detailed error messages and implement proper error handling in your code.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-category">
+                                <h2><i class="ri-shield-check-line"></i> Security & Privacy</h2>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Is my data secure?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Yes, we take security seriously:</p>
+                                        <ul>
+                                            <li>All API communications use HTTPS encryption</li>
+                                            <li>API keys are securely stored and encrypted</li>
+                                            <li>We don't store message content on our servers</li>
+                                            <li>WhatsApp sessions are isolated per user</li>
+                                            <li>Regular security audits and updates</li>
+                                        </ul>
+                                        <p>Read our <a href="/privacy-policy">Privacy Policy</a> for more details.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How should I store my API key?
+                                        <i class="ri-arrow-down-s-line faq-icon"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Best practices for API key security:</p>
+                                        <ul>
+                                            <li>Store API keys in environment variables, not in code</li>
+                                            <li>Use different API keys for development and production</li>
+                                            <li>Regenerate API keys regularly</li>
+                                            <li>Never commit API keys to version control</li>
+                                            <li>Restrict API key access to specific IP addresses if possible</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="no-results" id="noResults">
+                                <i class="ri-search-line" style="font-size: 3rem; color: var(--muted-foreground); margin-bottom: 1rem;"></i>
+                                <h3>No results found</h3>
+                                <p>Try searching with different keywords or browse the categories above.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+    
+    <script>
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other FAQ items
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                }
+            });
+        });
+        
+        // FAQ search functionality
+        document.getElementById('faqSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            const categories = document.querySelectorAll('.faq-category');
+            const noResults = document.getElementById('noResults');
+            let hasResults = false;
+            
+            categories.forEach(category => {
+                let categoryHasResults = false;
+                const categoryItems = category.querySelectorAll('.faq-item');
+                
+                categoryItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        categoryHasResults = true;
+                        hasResults = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Hide category if no items match
+                if (searchTerm && !categoryHasResults) {
+                    category.style.display = 'none';
+                } else {
+                    category.style.display = 'block';
+                }
+            });
+            
+            // Show/hide no results message
+            if (searchTerm && !hasResults) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+

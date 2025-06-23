@@ -1,0 +1,38 @@
+{
+  "name": "whatsapp-webhook-api",
+  "version": "1.0.0",
+  "main": "whatsapp-service.js",
+  "scripts": {
+    "start": "node whatsapp-service.js",
+    "dev": "node whatsapp-service.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@supabase/supabase-js": "^2.44.4",
+    "@whiskeysockets/baileys": "npm:@neoxr/baileys@7.6.15",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.10",
+    "pg": "^8.11.3",
+    "qrcode": "^1.5.3",
+    "qrcode-terminal": "^0.12.0",
+    "socket.io": "^4.7.5",
+    "vcf": "^2.1.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
